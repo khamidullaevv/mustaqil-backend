@@ -1,3 +1,6 @@
 from django.db import models
 
-# Create your models here.
+class Language(models.TextChoices):
+    ENGLISH = "en", "English"
+    UZBEK = "uz", "Uzbek"
+    RUSSIAN = "ru", "Russian"
