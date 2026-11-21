@@ -46,3 +46,17 @@ class StudentProfile(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.username} - {self.nickname if self.nickname else 'No Nickname'}"
+
+
+class Streak(models.Model):
+    student_profile = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='streaks')
+    start_date = models.DateField(default=get_tashkent_today)
+    end_date = models.DateField(blank=True, null=True)
+    current_streak = models.PositiveIntegerField(default=0)
+    longest_streak = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['-current_streak']
+
+    def __str__(self) -> str:
+        return f"{self.student_profile.user.username} - Current Streak: {self.current_streak}, Longest Streak: {self.longest_streak}"
