@@ -20,3 +20,29 @@ class School(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+class StudentProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='student_profile')
+    date_of_birth = models.DateField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True, unique=True)
+    telegram_username = models.CharField(max_length=64, blank=True, null=True, unique=True, default=None)
+    telegram_id = models.BigIntegerField(blank=True, null=True, unique=True, default=None)
+    nickname = models.CharField(max_length=64, blank=True, unique=True)
+    grade = models.PositiveSmallIntegerField(blank=True, null=True)
+    school = models.ForeignKey(
+        School,
+        on_delete=models.SET_NULL,
+        null=True, 
+        blank=True,
+        related_name='students')
+    preferred_language = models.CharField(max_length=2, choices=Language.choices, default=Language.UZBEK)
+    reminder_enabled = models.BooleanField(default=True)
+    reminder_time = models.TimeField(default=timezone.now().astimezone(ZoneInfo("Asia/Tashkent")).time())
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self) -> str:
+        return f"{self.user.username} - {self.nickname if self.nickname else 'No Nickname'}"
