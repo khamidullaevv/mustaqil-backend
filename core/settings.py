@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users',
     'jazzmin',
 ]
 
@@ -120,7 +119,7 @@ STATIC_URL = 'static/'
 
 
 # Authentication user model
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "app.User"
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
