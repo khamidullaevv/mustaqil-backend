@@ -62,7 +62,8 @@ class Problem(models.Model):
         ordering = ["id"]
 
     def __str__(self) -> str:
-        return f"#{self.pk} [{self.get_problem_type_display()}] {self.topic}"
+        problem_type_display = self.get_problem_type_display()
+        return f"#{self.pk} [{problem_type_display}] {self.topic}"
 
 
 class ChoiceOption(models.Model):
@@ -109,7 +110,7 @@ class ProblemSolution(models.Model):
         CHOICE_LABEL = "choice_label", "Choice Label"
         MATCHING_MAP = "matching_map", "Matching Pair"
         NUMERIC = "numeric", "Numerical"
-
+        SYMBOLIC = "symbolic", "Symbolic"
 
 
     problem = models.ForeignKey(
@@ -127,3 +128,31 @@ class ProblemSolution(models.Model):
 
     def __str__(self) -> str:
         return f"#{self.pk} [{self.problem}] {self.solution_steps[:30]}{'...' if len(self.solution_steps) > 30 else ''}"
+
+class Hint(models.Model):
+    class Level(models.PositiveSmallIntegerField):
+        LEVEL_CHOICES = [
+            (1, "Level 1"),
+            (2, "Level 2"),
+            (3, "Level 3"),
+        ]
+
+
+
+
+    problem = models.ForeignKey(
+        Problem,
+        on_delete=models.CASCADE,
+        related_name="hints",
+    )
+    text = models.TextField()
+    sort_order = models.PositiveSmallIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    level = models.PositiveSmallIntegerField(choices=Level.LEVEL_CHOICES, default=1)
+    content = models.TextField(blank=True, null=True)
+    class Meta:
+        ordering = ["sort_order", "id"]
+
+    def __str__(self) -> str:
+        return f"#{self.pk} [{self.problem}] {self.text[:30]}{'...' if len(self.text) > 30 else ''}"
