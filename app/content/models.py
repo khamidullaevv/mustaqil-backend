@@ -83,3 +83,23 @@ class ChoiceOption(models.Model):
 
     def __str__(self) -> str:
         return f"#{self.pk} [{self.problem}] {self.text[:30]}{'...' if len(self.text) > 30 else ''}"
+
+
+
+class MatchingPair(models.Model):
+    problem = models.ForeignKey(
+        Problem,
+        on_delete=models.CASCADE,
+        related_name="matching_pairs",
+    )
+    left_item = models.TextField()
+    right_item = models.TextField()
+    sort_order = models.PositiveSmallIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["id"]
+
+    def __str__(self) -> str:
+        return f"#{self.pk} [{self.problem}] {self.left_item[:30]}{'...' if len(self.left_item) > 30 else ''} - {self.right_item[:30]}{'...' if len(self.right_item) > 30 else ''}"
