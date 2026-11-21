@@ -103,3 +103,27 @@ class MatchingPair(models.Model):
 
     def __str__(self) -> str:
         return f"#{self.pk} [{self.problem}] {self.left_item[:30]}{'...' if len(self.left_item) > 30 else ''} - {self.right_item[:30]}{'...' if len(self.right_item) > 30 else ''}"
+
+class ProblemSolution(models.Model):
+    class AnswerMode(models.TextChoices):
+        CHOICE_LABEL = "choice_label", "Choice Label"
+        MATCHING_MAP = "matching_map", "Matching Pair"
+        NUMERIC = "numeric", "Numerical"
+
+
+
+    problem = models.ForeignKey(
+        Problem,
+        on_delete=models.CASCADE,
+        related_name="solutions",
+    )
+    answer_mode = models.CharField(max_length=20, choices=AnswerMode.choices, default=AnswerMode.NUMERIC)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    correct_answer = models.TextField(blank=True)
+    solution_steps = models.TextField(blank=True)
+    class Meta:
+        ordering = ["id"]
+
+    def __str__(self) -> str:
+        return f"#{self.pk} [{self.problem}] {self.solution_steps[:30]}{'...' if len(self.solution_steps) > 30 else ''}"
