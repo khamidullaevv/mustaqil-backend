@@ -63,3 +63,23 @@ class Problem(models.Model):
 
     def __str__(self) -> str:
         return f"#{self.pk} [{self.get_problem_type_display()}] {self.topic}"
+
+
+class ChoiceOption(models.Model):
+    problem = models.ForeignKey(
+        Problem,
+        on_delete=models.CASCADE,
+        related_name="choice_options",
+    )
+    text = models.TextField()
+    label = models.CharField(max_length=1, blank=True, null=True)
+    is_correct = models.BooleanField(default=False)
+    sort_order = models.PositiveSmallIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["id"]
+
+    def __str__(self) -> str:
+        return f"#{self.pk} [{self.problem}] {self.text[:30]}{'...' if len(self.text) > 30 else ''}"
