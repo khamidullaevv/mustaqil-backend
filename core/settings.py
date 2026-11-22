@@ -119,8 +119,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
-# Authentication user model
-AUTH_USER_MODEL = "app.User"
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
