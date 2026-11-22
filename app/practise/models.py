@@ -63,3 +63,22 @@ class Attempt(models.Model):
         status = "OK" if self.is_correct else "ERR"
         return f"{self.student.nickname} | #{self.problem} | {status}"
 
+class PreRegistration(models.Model):
+    student = models.ForeignKey(
+        StudentProfile,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="pre_registrations",
+    )
+    contact = models.CharField(max_length=120)
+    willing_to_pay = models.BooleanField(default=False)
+    expected_monthly_price_uzs = models.PositiveIntegerField(null=True, blank=True)
+    notes = models.TextField(blank=True, default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["id", "created_at"]
+
+    def __str__(self) -> str:
+        return f"{self.contact} (pay={self.willing_to_pay})"
