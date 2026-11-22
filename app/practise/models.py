@@ -1,6 +1,7 @@
 from django.db import models
+from django.utils import timezone
 
-from app.accounts import StudentProfile, get_tashkent_time
+from app.accounts.models import StudentProfile, get_tashkent_today
 from app.content.models import Problem
 
 class DailySeries(models.Model):
@@ -16,7 +17,7 @@ class DailySeries(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    series_date = models.DateField(default=get_tashkent_time().date)
+    series_date = models.DateField(default=get_tashkent_today)
     is_completed = models.BooleanField(default=False)
     completed_at = models.DateTimeField(blank=True, null=True)
     earned_points = models.PositiveSmallIntegerField(default=0)
