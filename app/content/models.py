@@ -65,6 +65,9 @@ class Problem(models.Model):
         problem_type_display = self.get_problem_type_display()
         return f"#{self.pk} [{problem_type_display}] {self.topic}"
 
+    def get_problem_type_display(self):
+        return dict(self.ProblemType.choices).get(self.problem_type, self.problem_type)
+
 
 class ChoiceOption(models.Model):
     problem = models.ForeignKey(
