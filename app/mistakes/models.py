@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db import models
 from django.utils import timezone
 
@@ -26,6 +26,11 @@ class Mistake(models.Model):
     class Meta:
         ordering = ["is_resolved", "next_review_at"]
         unique_together = [("student", "problem")]
+
+    def schedule_next_review(self) -> None:
+        intervals_days = {0: 1, 1: 3, 2: 7}
+        days = intervals_days.get(self.review_stage, 7)
+        self.next_review_at = timezone.now() + timedelta(days=days)
 
     def __str__(self) -> str:
         return f"#{self.pk} [{self.student}] {self.problem} - Resolved: {self.is_resolved}"
