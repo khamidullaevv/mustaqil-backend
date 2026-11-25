@@ -57,3 +57,21 @@ class ExamSession(models.Model):
 
     def __str__(self) -> str:
         return f"#{self.pk} [{self.student}] {self.problem} - {self.exam_date}"
+
+class ExamQuestion(models.Model):
+    exam_session = models.ForeignKey(
+        ExamSession,
+        on_delete=models.CASCADE,
+        related_name="questions",
+    )
+    question_number = models.PositiveSmallIntegerField()
+    is_answered = models.BooleanField(default=False)
+    is_correct = models.BooleanField(default=False)
+    answered_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ["question_number"]
+        unique_together = ("exam_session", "question_number")
+
+    def __str__(self) -> str:
+        return f"#{self.pk} [{self.exam_session}] Question {self.question_number}"
