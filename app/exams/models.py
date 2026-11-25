@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db import models
 from django.utils import timezone
 
@@ -46,7 +46,14 @@ class ExamSession(models.Model):
         ordering = ["id", "exam_date"]
         unique_together = ("student", "problem", "exam_date")
 
-    
+    def save(self, *args, **kwargs):
+        if not self.expires_at:
+            start = timezone.now()
+            minutes = 150 if self.session_type == self.SessionType.EXAM else 20
+            self.expires_at = start + timedelta(minutes=minutes)
+        if not self.total_questions:
+            self.total_questions = 45 if self.session_type == self.SessionType.EXAM else 15
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return f"#{self.pk} [{self.student}] {self.problem} - {self.exam_date}"
