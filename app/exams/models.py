@@ -14,7 +14,17 @@ class ExamSession(models.Model):
         IN_PROGRESS = "in_progress", "В процессе"
         COMPLETED = "completed", "Завершён"
         EXPIRED = "expired", "Время вышло"
-
+    
+    session_type = models.CharField(
+        max_length=20,
+        choices=SessionType.choices,
+        default=SessionType.PRACTICE,
+    )
+    session_status = models.CharField(
+        max_length=20,
+        choices=SessionStatus.choices,
+        default=SessionStatus.IN_PROGRESS,
+    )
     student = models.ForeignKey(
         StudentProfile,
         on_delete=models.CASCADE,
@@ -35,6 +45,8 @@ class ExamSession(models.Model):
     class Meta:
         ordering = ["id", "exam_date"]
         unique_together = ("student", "problem", "exam_date")
+
+    
 
     def __str__(self) -> str:
         return f"#{self.pk} [{self.student}] {self.problem} - {self.exam_date}"
