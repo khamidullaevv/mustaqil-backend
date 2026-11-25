@@ -5,7 +5,16 @@ from django.utils import timezone
 from app.accounts.models import StudentProfile, get_tashkent_today
 from app.content.models import Problem
 
-class Exam(models.Model):
+class ExamSession(models.Model):
+    class SessionType(models.TextChoices):
+        PRACTICE = "practice", "Практика"
+        EXAM = "exam", "Экзамен"
+        DIOGNOSTIC = "diagnostic", "Диагностический"
+    class SessionStatus(models.TextChoices):
+        IN_PROGRESS = "in_progress", "В процессе"
+        COMPLETED = "completed", "Завершён"
+        EXPIRED = "expired", "Время вышло"
+
     student = models.ForeignKey(
         StudentProfile,
         on_delete=models.CASCADE,
